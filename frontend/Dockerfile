@@ -6,8 +6,9 @@ COPY package.json package-lock.json* ./
 RUN npm install
 
 COPY . .
-
 RUN npm run build
 
-# Railway injects PORT
-CMD ["sh", "-c", "npm run preview -- --host 0.0.0.0 --port $PORT"]
+# Use a proper static file server
+RUN npm install -g serve
+
+CMD ["sh", "-c", "serve -s dist -l $PORT"]
