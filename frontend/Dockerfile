@@ -1,23 +1,31 @@
-FROM node:20-alpine
+# --- Stage 1: Build ---
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# 1. Install dependencies using a cache-efficient method
+# Install dependencies
 COPY package.json package-lock.json* ./
 RUN npm ci
 
-# 2. Copy source and build
+# Copy source and build the app
 COPY . .
 RUN npm run build
 
-# 3. Use a lightweight way to serve the app
-# Installing 'serve' globally is fine, but we need to fix the CMD syntax
+# --- Stage 2: Production ---
+FROM node:20-alpine AS runner
+
+WORKDIR /app
+
+# Only install the server, keep it lightweight
 RUN npm install -g serve
 
-# Railway injects the PORT env var; we don't need to hardcode it to 3000
-# but keeping a default is safe for local testing.
+# Only copy the production-ready files from the builder stage
+# Adjust "dist" if your build folder is named "build" or "out"
+COPY --from=builder /app/dist ./dist
+
+# Railway automatically injects the PORT variable
 ENV PORT=3000
 EXPOSE ${PORT}
 
-# 4. FIX: Use 'sh -c' to ensure the $PORT variable is expanded correctly
+# Use sh -c to ensure $PORT is expanded by the shell
 CMD ["sh", "-c", "serve -s dist -l $PORT"]
