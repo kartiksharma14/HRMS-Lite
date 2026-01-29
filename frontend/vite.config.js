@@ -5,8 +5,8 @@ export default defineConfig({
   plugins: [react()],
   server: {
     allowedHosts: [
-      'https://authentic-energy-production.up.railway.app',
-      'https://hrms-lite-production-0a5b.up.railway.app/'
+      'authentic-energy-production.up.railway.app',
+      'hrms-lite-production-0a5b.up.railway.app'
     ],
   },
 })
