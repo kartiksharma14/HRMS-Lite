@@ -7,10 +7,7 @@ RUN npm install
 
 COPY . .
 
-# Build frontend
 RUN npm run build
 
-# Railway provides PORT
-EXPOSE 4173
-
-CMD ["npm", "run", "preview", "--", "--host", "0.0.0.0", "--port", "4173"]
+# Railway injects PORT
+CMD ["sh", "-c", "npm run preview -- --host 0.0.0.0 --port $PORT"]
