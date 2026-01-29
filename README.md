@@ -90,15 +90,17 @@ HRMS-Lite/
 
 ### Frontend (`.env`)
 ``env
+~~~
 VITE_API_URL=http://localhost:8000
 DATABASE_URL=postgresql://postgres:postgres@db:5432/hrms
+~~~
 ▶️ Running the Project Locally (Docker)
 Prerequisites
-
+~~~
 Docker
 
 Docker Compose
-
+~~~
 Steps
 
 1. Clone the repository:
