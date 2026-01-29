@@ -1,12 +1,12 @@
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
 export default defineConfig({
   plugins: [react()],
   server: {
-    proxy: {
-      '/api': {
-        target: 'https://hrms-lite-production-0a5b.up.railway.app/api',
-        changeOrigin: true,
-        secure: true,
-      },
-    },
+    allowedHosts: [
+      'https://authentic-energy-production.up.railway.app',
+      'https://hrms-lite-production-0a5b.up.railway.app/'
+    ],
   },
 })
