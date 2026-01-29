@@ -25,8 +25,13 @@ RUN npm install -g serve
 COPY --from=builder /app/dist ./dist
 
 # Railway provides the PORT environment variable automatically
-ENV PORT=3000
-EXPOSE ${PORT}
+# ... (rest of your multi-stage Dockerfile)
 
-# Execute using shell form to expand the $PORT variable
+# Railway provides the PORT environment variable automatically. 
+# Do NOT hardcode 8080 or 3000 here.
+ENV PORT=3000
+
+# This is the critical fix: 
+# Using "sh -c" allows the shell to swap $PORT for the actual number (e.g., 5432)
+# The -l flag tells 'serve' which port to listen on.
 CMD ["sh", "-c", "serve -s dist -l $PORT"]
