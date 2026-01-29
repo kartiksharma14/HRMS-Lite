@@ -2,22 +2,22 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Install dependencies
+# 1. Install dependencies using a cache-efficient method
 COPY package.json package-lock.json* ./
 RUN npm ci
 
-# Copy source and build
+# 2. Copy source and build
 COPY . .
 RUN npm run build
 
-# Install static server
+# 3. Use a lightweight way to serve the app
+# Installing 'serve' globally is fine, but we need to fix the CMD syntax
 RUN npm install -g serve
 
-# Railway sets PORT automatically
+# Railway injects the PORT env var; we don't need to hardcode it to 3000
+# but keeping a default is safe for local testing.
 ENV PORT=3000
+EXPOSE ${PORT}
 
-# Expose is optional but recommended
-EXPOSE 3000
-
-# Serve must bind to 0.0.0.0 for Railway
-CMD ["serve", "-s", "dist", "-l", "tcp://0.0.0.0:${PORT}"]
+# 4. FIX: Use 'sh -c' to ensure the $PORT variable is expanded correctly
+CMD ["sh", "-c", "serve -s dist -l $PORT"]
