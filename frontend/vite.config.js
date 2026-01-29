@@ -3,7 +3,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://hrms-lite-production-0a5b.up.railway.app',
+        target: 'https://hrms-lite-production-0a5b.up.railway.app/api',
         changeOrigin: true,
         secure: true,
       },
